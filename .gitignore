@@ -1,8 +1,5 @@
-.settings
-.project
-.classpath
-target/
-.idea
 .DS_Store
-.metadata
 bin/
+.project
+.settings
+.classpath
