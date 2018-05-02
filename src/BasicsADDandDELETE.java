@@ -1,6 +1,12 @@
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import io.restassured.RestAssured;
@@ -9,6 +15,16 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
 public class BasicsADDandDELETE {
+	
+	Properties prop = new Properties();
+	
+	@Before
+	public void getData() throws IOException {
+		
+		FileInputStream fileloca = new FileInputStream("/Users/work/Desktop/Jawad/DemoProject/src/datafiles/evn.properties");
+		prop.load(fileloca);
+//		prop.getProperty("HOST");  Base URL from the properties
+	}
 	
 	@Test
 	public  void testingAddAndDeleteRequests() {
@@ -30,10 +46,10 @@ public class BasicsADDandDELETE {
 		
 		// Task 1, getting a return response and storing it in a string
 		// Base URL
-		RestAssured.baseURI="https://maps.googleapis.com";
+		RestAssured.baseURI = prop.getProperty("HostURL");
 		
 		Response response = given().
-				queryParam("key","AIzaSyBx2cIDOsGuk1ulcPlKjFBcq69XSTu1BZE").
+				queryParam("key",prop.getProperty("GoogleKey")).
 				body(id).
 		when().
 				post("/maps/api/place/add/json").
@@ -54,7 +70,7 @@ public class BasicsADDandDELETE {
 		
 		// put the place_id this in delete request
 		given().
-				queryParam("key","AIzaSyBx2cIDOsGuk1ulcPlKjFBcq69XSTu1BZE").
+				queryParam("key",prop.getProperty("GoogleKey")).
 				body("{" + 
 						"  \"place_id\": \"" + placeid + "\"" + 
 						"}").

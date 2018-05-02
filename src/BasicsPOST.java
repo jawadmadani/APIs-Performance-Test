@@ -1,6 +1,12 @@
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import io.restassured.RestAssured;
@@ -8,14 +14,24 @@ import io.restassured.http.ContentType;
 
 public class BasicsPOST {
 	
+	Properties prop = new Properties();
+	@Before
+	public void getData() throws IOException {
+		
+		FileInputStream fileloca = new FileInputStream("/Users/work/Desktop/Jawad/DemoProject/src/datafiles/evn.properties");
+		prop.load(fileloca);
+//		prop.getProperty("HOST");  Base URL from the properties
+	}
+	
+	
 	@Test
 	public void testingPostRequest() {
 		
 		// BaseURL
-		RestAssured.baseURI="https://maps.googleapis.com";
+		RestAssured.baseURI = prop.getProperty("HostURL");
 		
 		given().
-				queryParam("key","AIzaSyBx2cIDOsGuk1ulcPlKjFBcq69XSTu1BZE").
+				queryParam("key", prop.getProperty("GoogleKey")).
 				body("{"+
 						  "\"location\": {"+
 						    "\"lat\": -33.8669710,"+
