@@ -9,7 +9,7 @@ import io.restassured.http.ContentType;
 public class BasicsPOST {
 	
 	@Test
-	public void testingPost() {
+	public void testingPostRequest() {
 		
 		// BaseURL
 		RestAssured.baseURI="https://maps.googleapis.com";

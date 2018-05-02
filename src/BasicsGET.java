@@ -10,7 +10,7 @@ import io.restassured.http.ContentType;
 public class BasicsGET {
 	
 	@Test
-	public void testingGet() {
+	public void testingGetRequest() {
 		
 		// BaseURL
 		RestAssured.baseURI="https://maps.googleapis.com";
@@ -34,7 +34,7 @@ public class BasicsGET {
 			// content type is JSON or not
 			// put assertions in body to see if its returning the right values
 			// header response is correct 
-					
+			
 
 	}
 
