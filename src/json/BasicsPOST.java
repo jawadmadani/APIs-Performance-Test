@@ -31,7 +31,7 @@ public class BasicsPOST {
 		// BaseURL
 		RestAssured.baseURI = "https://maps.googleapis.com";
 		
-		given().
+		given().log().all().
 				queryParam("key", prop.getProperty("GoogleKey")). //importing the key from env.properties
 				body("{"+
 						  "\"location\": {"+

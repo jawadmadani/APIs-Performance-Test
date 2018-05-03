@@ -34,7 +34,7 @@ public class AdvancedPOST {
 		// BaseURL
 		RestAssured.baseURI = prop.getProperty("HostURL");  // importing from an external file
 		
-		given().
+		given().log().all().
 				queryParam("key", prop.getProperty("GoogleKey")).  // importing from an external file
 				body(PayLoad.getPostData()).  // getting the post data from payload
 		when().

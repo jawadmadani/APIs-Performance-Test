@@ -32,7 +32,7 @@ public class BasicsGET {
 		// BaseURL
 		RestAssured.baseURI = "https://maps.googleapis.com";
 		
-			given().
+			given().log().all().
 					param("location","-33.8670522,151.1957362").
 					param("radius","500").
 					param("key", prop.getProperty("GoogleKey")). //importing the key from env.properties

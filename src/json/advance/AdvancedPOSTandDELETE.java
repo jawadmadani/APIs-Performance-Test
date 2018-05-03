@@ -37,7 +37,7 @@ public class AdvancedPOSTandDELETE {
 		// Base URL
 		RestAssured.baseURI = prop.getProperty("HostURL");
 		
-		Response response = given().
+		Response response = given().log().all().
 				queryParam("key",prop.getProperty("GoogleKey")).
 				body(PayLoad.getPostData()).   // getting the post data from PayLoad class 
 		when().
@@ -49,19 +49,21 @@ public class AdvancedPOSTandDELETE {
 		
 		
 		// Task 2, extracting the place_id from the response
-				JsonPath jsonObj =  ReusebleMethods.rawToJSON(response);
-				System.out.printf(jsonObj.get("place_id"));
+		JsonPath jsonObj =  ReusebleMethods.rawToJSON(response);
+		System.out.printf(jsonObj.get("place_id"));
 					
-				// put the place_id this in delete request
-				given().
-						queryParam("key",prop.getProperty("GoogleKey")). // importing the key from evn.properties
-						body("{" + 
-								"  \"place_id\": \"" + jsonObj.get("place_id") + "\"" + 
-								"}").
-				when().
+		
+		// put the place_id this in delete request
+		given().
+				queryParam("key",prop.getProperty("GoogleKey")). // importing the key from evn.properties
+				body("{" + 
+						"  \"place_id\": \"" + jsonObj.get("place_id") + "\"" + 
+						"}").
+		when().
 				post(Resources.placeDeleteData()).
-		then().assertThat().statusCode(200).and().contentType(ContentType.JSON).and().
-			body("status", equalTo("OK"));
+		then().
+				assertThat().statusCode(200).and().contentType(ContentType.JSON).and().
+					body("status", equalTo("OK"));
 	}
 
 }

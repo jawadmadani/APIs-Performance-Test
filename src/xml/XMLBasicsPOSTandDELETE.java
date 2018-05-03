@@ -33,7 +33,7 @@ public class XMLBasicsPOSTandDELETE {
 		// Base URL
 		RestAssured.baseURI = "https://maps.googleapis.com";
 		
-		Response response = given().
+		Response response = given().log().all().
 				queryParam("key",prop.getProperty("GoogleKey")). // importing the key from evn.properties
 				body("<PlaceAddRequest>" + 
 						"  <location>" + 
@@ -55,14 +55,14 @@ public class XMLBasicsPOSTandDELETE {
 				assertThat().contentType(ContentType.XML).and().
 					extract().response();
 		
-		XmlPath jsonobj =  ReusebleMethods.rawToXML(response);
-		System.out.printf(jsonobj.get("PlaceAddResponse.place_id"));
+		XmlPath xmlobj =  ReusebleMethods.rawToXML(response);
+		System.out.printf(xmlobj.get("PlaceAddResponse.place_id"));
 		
 		// put the place_id this in delete request
 		given().
 				queryParam("key",prop.getProperty("GoogleKey")). // importing the key from evn.properties
 				body("<PlaceDeleteRequest>" + 
-						"  <place_id> " + jsonobj.get("PlaceAddResponse.place_id") + " </place_id>" + 
+						"  <place_id> " + xmlobj.get("PlaceAddResponse.place_id") + " </place_id>" + 
 						"</PlaceDeleteRequest>").
 		when().
 				post("/maps/api/place/delete/xml").
