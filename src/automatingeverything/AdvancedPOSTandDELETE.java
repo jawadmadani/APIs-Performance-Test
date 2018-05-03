@@ -24,7 +24,7 @@ public class AdvancedPOSTandDELETE {
 	@Before
 	public void getData() throws IOException {
 		
-		FileInputStream fileloca = new FileInputStream("/Users/work/Desktop/Jawad/DemoProject/src/datafiles/evn.properties");
+		FileInputStream fileloca = new FileInputStream("/Users/work/Desktop/Jawad/DemoProject/src/datafiles/evn.properties");  // in windows it's //Users//work//..
 		prop.load(fileloca);
 //		prop.getProperty("HOST");  Base URL from the properties
 	}
