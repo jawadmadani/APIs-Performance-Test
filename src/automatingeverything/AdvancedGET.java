@@ -1,3 +1,5 @@
+package automatingeverything;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -8,19 +10,19 @@ import java.util.Properties;
 import org.junit.Before;
 import org.junit.Test;
 
+import datafiles.Resources;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 
-
-public class BasicsGET {
+public class AdvancedGET {
 	
 	Properties prop = new Properties();
 	
 	@Before
 	public void getData() throws IOException {
 		
-		FileInputStream fileloca = new FileInputStream("/Users/work/Desktop/Jawad/DemoProject/src/datafiles/evn.properties");
-		prop.load(fileloca);
+		FileInputStream fileloca = new FileInputStream("/Users/work/Desktop/Jawad/DemoProject/src/datafiles/evn.properties"); // reading the external file
+		prop.load(fileloca);  // loading the external file
 //		prop.getProperty("HOST");  Base URL from the properties
 	}
 	
@@ -29,15 +31,15 @@ public class BasicsGET {
 	public void testingGetRequest() {
 		
 		// BaseURL
-		RestAssured.baseURI = "https://maps.googleapis.com";
+		RestAssured.baseURI = prop.getProperty("HostURL"); // importing from an external file
 		
 			given().
 					param("location","-33.8670522,151.1957362").
 					param("radius","500").
-					param("key", prop.getProperty("GoogleKey")). //importing the key from env.properties
+					param("key", prop.getProperty("GoogleKey")).  // importing from an external file
 			
 			when().
-					get("/maps/api/place/nearbysearch/json").
+					get(Resources.placeNearBySearch()).  // importing from an external class
 			
 			then().
 					assertThat().statusCode(200).and().contentType(ContentType.JSON).and().

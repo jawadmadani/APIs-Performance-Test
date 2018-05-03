@@ -1,3 +1,4 @@
+package automatingeverything;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -9,12 +10,16 @@ import java.util.Properties;
 import org.junit.Before;
 import org.junit.Test;
 
+import datafiles.Resources;
+import datafiles.PayLoad;
+
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 
-public class BasicsPOST {
+public class AdvancedPOST {
 	
 	Properties prop = new Properties();
+	
 	@Before
 	public void getData() throws IOException {
 		
@@ -28,25 +33,13 @@ public class BasicsPOST {
 	public void testingPostRequest() {
 		
 		// BaseURL
-		RestAssured.baseURI = "https://maps.googleapis.com";
+		RestAssured.baseURI = prop.getProperty("HostURL");  // importing from an external file
 		
 		given().
-				queryParam("key", prop.getProperty("GoogleKey")). //importing the key from env.properties
-				body("{"+
-						  "\"location\": {"+
-						    "\"lat\": -33.8669710,"+
-						    "\"lng\": 151.1958750"+
-						  "},"+
-						  "\"accuracy\": 50,"+
-						  "\"name\": \"Google Shoes!\","+
-						  "\"phone_number\": \"(02) 9374 4000\","+
-						  "\"address\": \"48 Pirrama Road, Pyrmont, NSW 2009, Australia\","+
-						  "\"types\": [\"shoe_store\"],"+
-						  "\"website\": \"http://www.google.com.au/\","+
-						  "\"language\": \"en-AU\""+
-						"}").
+				queryParam("key", prop.getProperty("GoogleKey")).  // importing from an external file
+				body(PayLoad.getPostData()).  // getting the post data from payload
 		when().
-				post("/maps/api/place/add/json").
+				post(Resources.placePostData()). // importing from an external class
 		
 		then().
 				assertThat().statusCode(200).and().contentType(ContentType.JSON).and().

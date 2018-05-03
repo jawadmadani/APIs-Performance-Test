@@ -1,20 +1,23 @@
+package automatingeverything;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import datafiles.PayLoad;
+import datafiles.Resources;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
-public class BasicsADDandDELETE {
+public class AdvancedPOSTandDELETE {
 	
 	Properties prop = new Properties();
 	
@@ -27,22 +30,7 @@ public class BasicsADDandDELETE {
 	}
 	
 	@Test
-	public  void testingAddAndDeleteRequests() {
-		
-		String id = "{"+
-				  "\"location\": {"+
-				    "\"lat\": -33.8669710,"+
-				    "\"lng\": 151.1958750"+
-				  "},"+
-				  "\"accuracy\": 50,"+
-				  "\"name\": \"Google Shoes!\","+
-				  "\"phone_number\": \"(02) 9374 4000\","+
-				  "\"address\": \"48 Pirrama Road, Pyrmont, NSW 2009, Australia\","+
-				  "\"types\": [\"shoe_store\"],"+
-				  "\"website\": \"http://www.google.com.au/\","+
-				  "\"language\": \"en-AU\""+
-				"}";
-		
+	public  void testingPostAndDeleteRequests() {
 		
 		// Task 1, getting a return response and storing it in a string
 		// Base URL
@@ -50,9 +38,9 @@ public class BasicsADDandDELETE {
 		
 		Response response = given().
 				queryParam("key",prop.getProperty("GoogleKey")).
-				body(id).
+				body(PayLoad.getPostData()).   // getting the post data from PayLoad class 
 		when().
-				post("/maps/api/place/add/json").
+				post(Resources.placePostData()).
 		
 		then().
 				assertThat().statusCode(200).and().contentType(ContentType.JSON).and().
@@ -75,7 +63,7 @@ public class BasicsADDandDELETE {
 						"  \"place_id\": \"" + placeid + "\"" + 
 						"}").
 		when().
-				post("/maps/api/place/delete/json").
+				post(Resources.placeDeleteData()).
 		then().assertThat().statusCode(200).and().contentType(ContentType.JSON).and().
 			body("status", equalTo("OK"));
 	}
