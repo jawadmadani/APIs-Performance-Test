@@ -1,4 +1,4 @@
-package automatingeverything;
+package json.advance;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -10,12 +10,12 @@ import java.util.Properties;
 import org.junit.Before;
 import org.junit.Test;
 
-import datafiles.PayLoad;
-import datafiles.Resources;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import json.advance.datafiles.PayLoad;
+import json.advance.datafiles.Resources;
 
 public class AdvancedPOSTandDELETE {
 	
@@ -24,7 +24,7 @@ public class AdvancedPOSTandDELETE {
 	@Before
 	public void getData() throws IOException {
 		
-		FileInputStream fileloca = new FileInputStream("/Users/work/Desktop/Jawad/DemoProject/src/datafiles/evn.properties");  // in windows it's //Users//work//..
+		FileInputStream fileloca = new FileInputStream("/Users/work/Desktop/Jawad/DemoProject/src/evn.properties");  // in windows it's //Users//work//..
 		prop.load(fileloca);
 //		prop.getProperty("HOST");  Base URL from the properties
 	}

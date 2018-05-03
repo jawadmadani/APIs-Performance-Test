@@ -1,3 +1,4 @@
+package json;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -18,7 +19,7 @@ public class BasicsPOST {
 	@Before
 	public void getData() throws IOException {
 		
-		FileInputStream fileloca = new FileInputStream("/Users/work/Desktop/Jawad/DemoProject/src/datafiles/evn.properties");
+		FileInputStream fileloca = new FileInputStream("/Users/work/Desktop/Jawad/DemoProject/src/evn.properties");
 		prop.load(fileloca);
 //		prop.getProperty("HOST");  Base URL from the properties
 	}
