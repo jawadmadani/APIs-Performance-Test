@@ -10,6 +10,7 @@ import java.util.Properties;
 import org.junit.Before;
 import org.junit.Test;
 
+import commonmethods.ReusebleMethods;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
@@ -48,21 +49,16 @@ public class AdvancedPOSTandDELETE {
 		
 		
 		// Task 2, extracting the place_id from the response
-		String responseString = response.asString();		// converting it to string
-
-		JsonPath js = new JsonPath(responseString);			// converting to JSON	
-		
-		String placeid = js.get("place_id");				// grabbing the place_id from it as it is in JSON now
-		System.out.println(placeid);
-		
-		
-		// put the place_id this in delete request
-		given().
-				queryParam("key",prop.getProperty("GoogleKey")).
-				body("{" + 
-						"  \"place_id\": \"" + placeid + "\"" + 
-						"}").
-		when().
+				JsonPath jsonObj =  ReusebleMethods.rawToJSON(response);
+				System.out.printf(jsonObj.get("place_id"));
+					
+				// put the place_id this in delete request
+				given().
+						queryParam("key",prop.getProperty("GoogleKey")). // importing the key from evn.properties
+						body("{" + 
+								"  \"place_id\": \"" + jsonObj.get("place_id") + "\"" + 
+								"}").
+				when().
 				post(Resources.placeDeleteData()).
 		then().assertThat().statusCode(200).and().contentType(ContentType.JSON).and().
 			body("status", equalTo("OK"));

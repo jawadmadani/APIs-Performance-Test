@@ -14,6 +14,8 @@ import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
+import commonmethods.ReusebleMethods;
+
 public class BasicsPOSTandDELETE {
 	
 	Properties prop = new Properties();
@@ -60,19 +62,14 @@ public class BasicsPOSTandDELETE {
 		
 		
 		// Task 2, extracting the place_id from the response
-		String responseString = response.asString();		// converting it to string
-
-		JsonPath js = new JsonPath(responseString);			// converting to JSON	
-		
-		String placeid = js.get("place_id");				// grabbing the place_id from it as it is in JSON now
-		System.out.println(placeid);
-		
-		
+		JsonPath jsonObj =  ReusebleMethods.rawToJSON(response);
+		System.out.printf(jsonObj.get("place_id"));
+			
 		// put the place_id this in delete request
 		given().
 				queryParam("key",prop.getProperty("GoogleKey")). // importing the key from evn.properties
 				body("{" + 
-						"  \"place_id\": \"" + placeid + "\"" + 
+						"  \"place_id\": \"" + jsonObj.get("place_id") + "\"" + 
 						"}").
 		when().
 				post("/maps/api/place/delete/json").
