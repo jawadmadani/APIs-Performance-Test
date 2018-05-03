@@ -1,6 +1,6 @@
 package xml;
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertEquals;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -9,11 +9,13 @@ import java.util.Properties;
 import org.junit.Before;
 import org.junit.Test;
 
+import commonmethods.ReusebleMethods;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.path.xml.XmlPath;
+import io.restassured.response.Response;
 
-
-public class BasicsGET {
+public class XMLBasicsGET {
 	
 	Properties prop = new Properties();
 	
@@ -32,19 +34,27 @@ public class BasicsGET {
 		// BaseURL
 		RestAssured.baseURI = "https://maps.googleapis.com";
 		
-			given().
+			Response response = given().
 					param("location","-33.8670522,151.1957362").
 					param("radius","500").
 					param("key", prop.getProperty("GoogleKey")). //importing the key from env.properties
 			
 			when().
-					get("/maps/api/place/nearbysearch/json").
+					get("/maps/api/place/nearbysearch/xml").
 			
 			then().
-					assertThat().statusCode(200).and().contentType(ContentType.JSON).and().
-			body("results[0].name", equalTo("Sydney")).and().
-			body("results[0].place_id", equalTo("ChIJP3Sa8ziYEmsRUKgyFmh9AQM")).and().
-			header("Server", "scaffolding on HTTPServer2");
+					assertThat().statusCode(200).and().contentType(ContentType.XML).and().
+					extract().response();
+			
+			XmlPath xml = ReusebleMethods.rawToXML(response);
+			
+			System.out.println(xml.get()); // printing it all
+			
+			assertEquals("Sydney", xml.get("PlaceSearchResponse.result[0].name"));
+			
+//			body("results[0].name", equalTo("Sydney")).and().
+//			body("results[0].place_id", equalTo("ChIJP3Sa8ziYEmsRUKgyFmh9AQM")).and().
+//			header("Server", "scaffolding on HTTPServer2");
 			
 			
 			// check the status code of the response
