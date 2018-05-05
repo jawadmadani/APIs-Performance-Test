@@ -51,16 +51,8 @@ public class XMLBasicsGET {
 			System.out.println(xml.get()); // printing it all
 			
 			assertEquals("Sydney", xml.get("PlaceSearchResponse.result[0].name"));
+			assertEquals("ChIJP3Sa8ziYEmsRUKgyFmh9AQM", xml.get("PlaceSearchResponse.result[0].place_id"));
 			
-//			body("results[0].name", equalTo("Sydney")).and().
-//			body("results[0].place_id", equalTo("ChIJP3Sa8ziYEmsRUKgyFmh9AQM")).and().
-//			header("Server", "scaffolding on HTTPServer2");
-			
-			
-			// check the status code of the response
-			// content type is JSON or not
-			// put assertions in body to see if its returning the right values
-			// header response is correct 
 			
 
 	}

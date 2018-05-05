@@ -50,7 +50,7 @@ public class AdvancedPOSTandDELETE {
 		
 		// Task 2, extracting the place_id from the response
 		JsonPath jsonObj =  ReusebleMethods.rawToJSON(response);
-		System.out.printf(jsonObj.get("place_id"));
+		System.out.println((String)jsonObj.get("place_id"));
 					
 		
 		// put the place_id this in delete request

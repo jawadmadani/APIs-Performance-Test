@@ -54,8 +54,7 @@ public class BasicsGETExtractingALL {
 			
 			int count = jsonobj.get("results.size()");
 			for (int i = 0; i < count; i++) {
-				System.out.printf(jsonobj.get("results["+ i +"].name"));
-				System.out.println("");
+				System.out.println((String)jsonobj.get("results["+ i +"].name"));
 			}
 			System.out.println(count);
 			

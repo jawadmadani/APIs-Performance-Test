@@ -1,20 +1,23 @@
 package twitter.json;
 
+import static io.restassured.RestAssured.given;
+
 import org.junit.Test;
 
+import commonmethods.ReusebleMethods;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import static io.restassured.RestAssured.given;
-
-import commonmethods.ReusebleMethods;
 
 public class TweetsOAuth {
 	
-	String ConsumerKey="ztXsFr0ipQTIDue4MD20s4aL3";
-	String ConsumerSecret="kuOlC5wB1DZ8ahgOsEos1zLa7C4fLmlpSSB5QEJmFFEX70CT2n";
-	String Token="917476985835851778-vOmu4mScebK0zi7hTPXgprO9A7BMLsw";
-	String TokenSecret="tCw78M48rJC2mNWpNvZJuXhGUqFgQ8mqowdsjrDbwbQLs";
+	// credentials URL for oAuth
+	// https://apps.twitter.com 
+	
+	String ConsumerKey="H9U7ZSd2L2CVrASaKak6mWGjW";
+	String ConsumerSecret="GypoTuTaKFrY3rcEHo9JBYRpPWuaTFOThJqwrubbrmSAxqscOe";
+	String Token="822553307264778240-L0bkyt6DhelFN9d6OZvZTZtxM8hgqax";
+	String TokenSecret="yQHDZjEL0qTOtgxLSHqgymIeHnnbqz7Ap2cP5p4HG4hsT";
 	String id;
 	
 	@Test
@@ -31,11 +34,10 @@ public class TweetsOAuth {
 				.extract().response();
 	
 		JsonPath jsonobj = ReusebleMethods.rawToJSON(response);
-	
 		
-		System.out.printf(jsonobj.get("text"));
-		System.out.printf(jsonobj.get("id"));
-//	
+		System.out.println((String)jsonobj.get("text[0]"));
+		System.out.println((Long)jsonobj.get("id[0]"));
+	
 	}
 	
 	
@@ -46,7 +48,7 @@ public class TweetsOAuth {
 		
 		Response response =	given()
 				.auth().oauth(ConsumerKey, ConsumerSecret, Token, TokenSecret)
-				.queryParam("status", "I am creating this tweet with Automation")
+				.queryParam("status", "testing one more time #timeshere")   // tweet
 		.when()
 				.post("/update.json")
 		.then()
@@ -56,7 +58,8 @@ public class TweetsOAuth {
 		JsonPath jsonobj = ReusebleMethods.rawToJSON(response);
 	
 		System.out.println("Below is the tweet added");
-		System.out.printf(jsonobj.get("id"));
+		System.out.println((Long)jsonobj.get("id"));
+		System.out.println(jsonobj.get().toString());
 		
 		id=jsonobj.get("id").toString();
 		
@@ -64,27 +67,45 @@ public class TweetsOAuth {
 	
 	
 	@Test
-	public void E2E() {
-		createTweet();
+	public void testingPostAndDeleteRequests() {
 		
+		
+		// adding a tweet
 		RestAssured.baseURI="https://api.twitter.com/1.1/statuses";
 		
-		Response response = given()
+		Response response =	given()
+				.auth().oauth(ConsumerKey, ConsumerSecret, Token, TokenSecret)
+				.queryParam("status", "testing twitter apis using #RESTAssured")  // tweet
+		.when()
+				.post("/update.json")
+		.then()
+				.extract().response();
+		
+		
+		JsonPath jsonobj = ReusebleMethods.rawToJSON(response);
+	
+		System.out.println("Below is the tweet added");
+		System.out.println((Long)jsonobj.get("id"));
+		System.out.println(jsonobj.get().toString());
+		
+		id=jsonobj.get("id").toString();
+		
+		// deleting the tweet
+		given()
 				.auth().oauth(ConsumerKey, ConsumerSecret, Token, TokenSecret)
 		.when()
 				.post("/destroy/"+id+".json")
 		.then()
 				.extract().response();
 		
-		JsonPath jsonobj = ReusebleMethods.rawToJSON(response);
 		
+		// double checking we are deleting the right tweet
+		JsonPath jsonobj1 = ReusebleMethods.rawToJSON(response);
 		
-		//System.out.println(js.get("text"));
 		System.out.println("Tweet which got deleted with automation is below");
-		System.out.printf(jsonobj.get("text"));
-		System.out.printf(jsonobj.get("truncated"));
-	
-	
+		System.out.println((String)jsonobj1.get("text"));
+		System.out.println((String)jsonobj1.get("truncated"));
+		
 	}
 
 }

@@ -57,7 +57,7 @@ public class XMLBasicsPOST {
 				extract().response();
 		
 		XmlPath x = ReusebleMethods.rawToXML(response);
-		System.out.printf(x.get("PlaceAddResponse.place_id"));
+		System.out.println((String)x.get("PlaceAddResponse.place_id"));
 		
 		// the post request adds a place in google maps 
 	}

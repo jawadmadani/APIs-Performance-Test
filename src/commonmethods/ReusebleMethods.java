@@ -8,17 +8,17 @@ import io.restassured.response.Response;
 public class ReusebleMethods {
 	
 	public static XmlPath rawToXML(Response rawresponse) {
-		String responsexml = rawresponse.asString();
+		String responsestring = rawresponse.asString();
 		
-		XmlPath xmlresponse = new XmlPath(responsexml);
+		XmlPath xmlresponse = new XmlPath(responsestring);
 		
 		return xmlresponse;
 	}
 	
 	public static JsonPath rawToJSON(Response rawresponse) {
-		String responsejson = rawresponse.asString();
+		String responsestring = rawresponse.asString();
 		
-		JsonPath jsonresponse = new JsonPath(responsejson);
+		JsonPath jsonresponse = new JsonPath(responsestring);
 		
 		return jsonresponse;
 	}

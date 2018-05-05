@@ -56,7 +56,7 @@ public class XMLBasicsPOSTandDELETE {
 					extract().response();
 		
 		XmlPath xmlobj =  ReusebleMethods.rawToXML(response);
-//		System.out.printf(xmlobj.get("PlaceAddResponse.place_id"));
+		System.out.println((String)xmlobj.get("PlaceAddResponse.place_id"));
 		
 		// put the place_id this in delete request
 		given().
