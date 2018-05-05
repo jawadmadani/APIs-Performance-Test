@@ -1,4 +1,4 @@
-package json.advance.datafiles;
+package google.json.advance.datafiles;
 
 public class Resources {
 	

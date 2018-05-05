@@ -1,4 +1,5 @@
-package json;
+package google.json.advance;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -9,21 +10,22 @@ import java.util.Properties;
 import org.junit.Before;
 import org.junit.Test;
 
+import commonmethods.ReusebleMethods;
+import google.json.advance.datafiles.PayLoad;
+import google.json.advance.datafiles.Resources;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
-import commonmethods.ReusebleMethods;
-
-public class BasicsPOSTandDELETE {
+public class AdvancedPOSTandDELETE {
 	
 	Properties prop = new Properties();
 	
 	@Before
 	public void getData() throws IOException {
 		
-		FileInputStream fileloca = new FileInputStream("/Users/work/Desktop/Jawad/DemoProject/src/evn.properties");
+		FileInputStream fileloca = new FileInputStream("/Users/work/Desktop/Jawad/DemoProject/src/evn.properties");  // in windows it's //Users//work//..
 		prop.load(fileloca);
 //		prop.getProperty("HOST");  Base URL from the properties
 	}
@@ -31,30 +33,15 @@ public class BasicsPOSTandDELETE {
 	@Test
 	public  void testingPostAndDeleteRequests() {
 		
-		String id = "{"+
-				  "\"location\": {"+
-				    "\"lat\": -33.8669710,"+
-				    "\"lng\": 151.1958750"+
-				  "},"+
-				  "\"accuracy\": 50,"+
-				  "\"name\": \"Google Shoes!\","+
-				  "\"phone_number\": \"(02) 9374 4000\","+
-				  "\"address\": \"48 Pirrama Road, Pyrmont, NSW 2009, Australia\","+
-				  "\"types\": [\"shoe_store\"],"+
-				  "\"website\": \"http://www.google.com.au/\","+
-				  "\"language\": \"en-AU\""+
-				"}";
-		
-		
 		// Task 1, getting a return response and storing it in a string
 		// Base URL
-		RestAssured.baseURI = "https://maps.googleapis.com";
+		RestAssured.baseURI = prop.getProperty("HostURL");
 		
 		Response response = given().log().all().
-				queryParam("key",prop.getProperty("GoogleKey")). // importing the key from evn.properties
-				body(id).
+				queryParam("key",prop.getProperty("GoogleKey")).
+				body(PayLoad.getPostData()).   // getting the post data from PayLoad class 
 		when().
-				post("/maps/api/place/add/json").
+				post(Resources.placePostData()).
 		
 		then().
 				assertThat().statusCode(200).and().contentType(ContentType.JSON).and().
@@ -64,7 +51,8 @@ public class BasicsPOSTandDELETE {
 		// Task 2, extracting the place_id from the response
 		JsonPath jsonObj =  ReusebleMethods.rawToJSON(response);
 		System.out.printf(jsonObj.get("place_id"));
-			
+					
+		
 		// put the place_id this in delete request
 		given().
 				queryParam("key",prop.getProperty("GoogleKey")). // importing the key from evn.properties
@@ -72,9 +60,10 @@ public class BasicsPOSTandDELETE {
 						"  \"place_id\": \"" + jsonObj.get("place_id") + "\"" + 
 						"}").
 		when().
-				post("/maps/api/place/delete/json").
-		then().assertThat().statusCode(200).and().contentType(ContentType.JSON).and().
-			body("status", equalTo("OK"));
+				post(Resources.placeDeleteData()).
+		then().
+				assertThat().statusCode(200).and().contentType(ContentType.JSON).and().
+					body("status", equalTo("OK"));
 	}
 
 }

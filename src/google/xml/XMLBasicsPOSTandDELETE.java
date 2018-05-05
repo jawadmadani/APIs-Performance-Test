@@ -1,5 +1,4 @@
-package xml;
-
+package google.xml;
 import static io.restassured.RestAssured.given;
 
 import java.io.FileInputStream;
@@ -9,16 +8,16 @@ import java.util.Properties;
 import org.junit.Before;
 import org.junit.Test;
 
+import commonmethods.ReusebleMethods;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.path.xml.XmlPath;
 import io.restassured.response.Response;
 
-import commonmethods.ReusebleMethods;
-
-public class XMLBasicsPOST {
+public class XMLBasicsPOSTandDELETE {
 	
 	Properties prop = new Properties();
+	
 	@Before
 	public void getData() throws IOException {
 		
@@ -27,15 +26,15 @@ public class XMLBasicsPOST {
 //		prop.getProperty("HOST");  Base URL from the properties
 	}
 	
-	
 	@Test
-	public void testingPostRequest() {
+	public  void testingPostAndDeleteRequests() {
 		
-		// BaseURL
+		// Task 1, getting a return response and storing it in a string
+		// Base URL
 		RestAssured.baseURI = "https://maps.googleapis.com";
 		
 		Response response = given().log().all().
-				queryParam("key", prop.getProperty("GoogleKey")). //importing the key from env.properties
+				queryParam("key",prop.getProperty("GoogleKey")). // importing the key from evn.properties
 				body("<PlaceAddRequest>" + 
 						"  <location>" + 
 						"    <lat>-33.8669710</lat>" + 
@@ -53,13 +52,23 @@ public class XMLBasicsPOST {
 				post("/maps/api/place/add/xml").
 		
 		then().
-				assertThat().statusCode(200).and().contentType(ContentType.XML).
-				extract().response();
+				assertThat().contentType(ContentType.XML).and().
+					extract().response();
 		
-		XmlPath x = ReusebleMethods.rawToXML(response);
-		System.out.printf(x.get("PlaceAddResponse.place_id"));
+		XmlPath xmlobj =  ReusebleMethods.rawToXML(response);
+//		System.out.printf(xmlobj.get("PlaceAddResponse.place_id"));
 		
-		// the post request adds a place in google maps 
+		// put the place_id this in delete request
+		given().
+				queryParam("key",prop.getProperty("GoogleKey")). // importing the key from evn.properties
+				body("<PlaceDeleteRequest>" + 
+						"  <place_id> " + xmlobj.get("PlaceAddResponse.place_id") + " </place_id>" + 
+						"</PlaceDeleteRequest>").
+		when().
+				post("/maps/api/place/delete/xml").
+		then().
+				assertThat().contentType(ContentType.XML);
+		
 	}
 
 }

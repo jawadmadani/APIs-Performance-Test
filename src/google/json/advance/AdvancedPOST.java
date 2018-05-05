@@ -1,4 +1,4 @@
-package json.advance;
+package google.json.advance;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -10,10 +10,10 @@ import java.util.Properties;
 import org.junit.Before;
 import org.junit.Test;
 
+import google.json.advance.datafiles.PayLoad;
+import google.json.advance.datafiles.Resources;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import json.advance.datafiles.PayLoad;
-import json.advance.datafiles.Resources;
 
 public class AdvancedPOST {
 	
