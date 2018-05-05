@@ -1,5 +1,5 @@
 # APIs-Performance-Test
-Google APIs performance testing
+Google and Twitter APIs performance testing using RESTAssured (APIs Key & OAuth 1.0)
 
 
-This script checks the performance of GET, POST, DELETE and PUT requests using google places APIs with a unique key.
+This script checks the performance of GET, POST and DELETE requests using google places APIs.
